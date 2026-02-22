@@ -1,25 +1,43 @@
 :root {
-    --bg-color: #0f172a;
-    /* Psychedelic deep blue/navy */
+    /* Premium Vibrant Dark Palette */
+    --bg-gradient: linear-gradient(135deg, #111827, #1e1b4b, #312e81);
     --text-color: #f8fafc;
-    --yellow: #fcd34d;
-    /* Yellow Submarine Yellow */
-    --yellow-hover: #fbbf24;
+    --text-muted: #94a3b8;
+
+    /* Beatles Accents */
+    --yellow: #fbbf24;
+    /* Submarine Yellow */
+    --yellow-hover: #f59e0b;
     --light-blue: #38bdf8;
+    /* Penny Lane Blue */
+    --red-apple: #ef4444;
+    /* Apple Records Red */
 
-    --color-correct: #22c55e;
-    /* Vibrant retro green */
+    /* Game State Colors - More Vibrant */
+    --color-correct: #10b981;
+    /* Emerald Green */
     --color-absent: #475569;
-    /* Slate gray */
-    --color-empty: #1e293b;
-    --color-border: #334155;
-    --color-key: #334155;
+    /* Slate */
+    --color-empty: rgba(30, 41, 59, 0.4);
+    /* Glassy empty state */
 
-    --font-heading: 'Montserrat', sans-serif;
-    --font-body: 'Montserrat', sans-serif;
+    /* Borders & UI Elements */
+    --color-border: rgba(255, 255, 255, 0.15);
+    --color-key: rgba(255, 255, 255, 0.1);
+    --color-key-hover: rgba(255, 255, 255, 0.2);
 
+    /* Typography */
+    --font-heading: 'Outfit', 'Montserrat', sans-serif;
+    --font-body: 'Inter', 'Montserrat', sans-serif;
+
+    /* Animations & Layout */
     --flip-duration: 0.6s;
     --max-w: 600px;
+
+    /* Glassmorphism setup */
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
 * {
@@ -29,7 +47,8 @@
 }
 
 body {
-    background-color: var(--bg-color);
+    background: var(--bg-gradient);
+    background-attachment: fixed;
     color: var(--text-color);
     font-family: var(--font-body);
     display: flex;
@@ -37,45 +56,60 @@ body {
     min-height: 100vh;
     min-height: -webkit-fill-available;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* Header */
+/* Header - Glassmorphism */
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
-    border-bottom: 2px solid var(--color-border);
-    max-width: var(--max-w);
-    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--glass-border);
     width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .logo {
-    max-height: 80px;
+    max-height: 50px;
     width: auto;
     object-fit: contain;
-    margin: -10px 0;
-    -webkit-mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 35%, rgba(0, 0, 0, 0) 65%);
-    mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 35%, rgba(0, 0, 0, 0) 65%);
+    filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.4));
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
 }
 
 .icon-btn {
-    background: none;
-    border: none;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     color: var(--text-color);
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     cursor: pointer;
-    transition: transform 0.2s, color 0.2s;
-    width: 36px;
-    height: 36px;
+    transition: all 0.2s ease;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .icon-btn:hover {
-    transform: scale(1.1) rotate(5deg);
+    transform: translateY(-2px);
     color: var(--yellow);
-    background-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
 }
 
 /* Main Layout */
@@ -128,10 +162,9 @@ main {
     display: grid;
     grid-template-rows: repeat(5, 1fr);
     grid-template-columns: repeat(5, 1fr);
-    gap: 6px;
+    gap: 8px;
     width: 100%;
-    max-width: 300px;
-    /* Constrain width to keep it square and neat */
+    max-width: 320px;
 }
 
 /* Phrase Grid (Middle) */
@@ -139,16 +172,18 @@ main {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 15px;
-    /* space between words */
+    gap: 12px;
     width: 100%;
-    padding: 10px;
+    padding: 15px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .phrase-word {
     display: flex;
     gap: 4px;
-    /* space between letters in a word */
 }
 
 /* Common Tile Styles */
@@ -158,42 +193,49 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 800;
     text-transform: uppercase;
     border: 2px solid var(--color-border);
-    border-radius: 6px;
+    border-radius: 8px;
     background-color: var(--color-empty);
     color: var(--text-color);
-    transition: transform var(--flip-duration) cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform var(--flip-duration) cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease;
 }
 
 /* Specific Phrase Tile Overrides */
 .phrase-tile {
-    width: 32px;
-    height: 40px;
-    font-size: 1.4rem;
+    width: 34px;
+    height: 42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 700;
     border: 1px solid var(--color-border);
-    border-radius: 4px;
-    background-color: var(--color-empty);
+    border-radius: 6px;
+    background-color: rgba(15, 23, 42, 0.6);
     color: transparent;
-    /* hidden text initially */
     position: relative;
     text-transform: uppercase;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .phrase-tile.revealed {
     background-color: var(--color-correct);
-    border-color: var(--color-correct);
-    color: var(--text-color);
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-color: #059669;
+    color: white;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .phrase-tile.punctuation {
     background-color: transparent;
     border: none;
-    color: var(--text-color);
+    box-shadow: none;
+    color: var(--text-muted);
     width: auto;
     align-items: flex-end;
     padding-bottom: 5px;
@@ -202,28 +244,31 @@ main {
 /* Wordle Tile States */
 .tile.active {
     border-color: var(--light-blue);
-    background-color: rgba(56, 189, 248, 0.1);
-    transform: scale(1.05);
-    /* pop when typing */
-    transition: transform 0.1s;
+    background-color: rgba(56, 189, 248, 0.15);
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 8px 15px rgba(56, 189, 248, 0.2);
+    transition: all 0.15s ease;
 }
 
 .tile.filled {
-    border-color: #556b8a;
+    border-color: var(--text-muted);
     transform: scale(1);
 }
 
 /* Flip Animations */
 .tile.correct {
     background-color: var(--color-correct);
-    border-color: var(--color-correct);
+    border-color: #059669;
     color: white;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .tile.absent {
     background-color: var(--color-absent);
-    border-color: var(--color-absent);
+    border-color: #334155;
     color: white;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes flipIn {
@@ -234,7 +279,8 @@ main {
     50% {
         transform: rotateX(90deg) scale(1.1);
         background-color: var(--color-empty);
-        border-color: var(--color-border);
+        border-color: var(--light-blue);
+        box-shadow: 0 10px 20px rgba(56, 189, 248, 0.2);
     }
 
     100% {
@@ -248,17 +294,17 @@ main {
 
 @keyframes popIn {
     0% {
-        transform: scale(0.8);
+        transform: scale(0.5) translateY(10px);
         opacity: 0;
     }
 
-    40% {
-        transform: scale(1.2);
+    50% {
+        transform: scale(1.2) translateY(-5px);
         opacity: 1;
     }
 
     100% {
-        transform: scale(1);
+        transform: scale(1) translateY(0);
     }
 }
 
@@ -310,23 +356,24 @@ main {
 .keyboard button {
     font-family: var(--font-heading);
     font-weight: 700;
-    font-size: 1rem;
-    border: none;
+    font-size: 1.1rem;
+    border: 1px solid var(--color-border);
     padding: 0;
     margin: 0;
     height: 58px;
-    border-radius: 6px;
-    background-color: var(--color-key);
+    border-radius: 8px;
+    background-color: var(--color-empty);
     color: var(--text-color);
     cursor: pointer;
     text-transform: uppercase;
     flex: 1;
     max-width: 45px;
-    transition: background-color 0.2s, transform 0.1s;
+    transition: all 0.2s ease;
     user-select: none;
     display: flex;
     justify-content: center;
     align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .keyboard button.wide-btn {
@@ -340,18 +387,29 @@ main {
     max-width: 22px;
 }
 
+.keyboard button:hover {
+    background-color: var(--color-key-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
 .keyboard button:active {
-    transform: scale(0.95);
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .keyboard button.correct {
     background-color: var(--color-correct);
+    border-color: #059669;
     color: white;
+    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.2);
 }
 
 .keyboard button.absent {
     background-color: var(--color-absent);
+    border-color: #334155;
     opacity: 0.5;
+    box-shadow: none;
 }
 
 /* Modals */
@@ -361,15 +419,15 @@ main {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(15, 23, 42, 0.85);
-    /* Dark overlay */
-    backdrop-filter: blur(5px);
+    background-color: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 2000;
     opacity: 1;
-    transition: opacity 0.3s;
+    transition: opacity 0.3s ease;
 }
 
 .modal.hidden {
@@ -378,59 +436,82 @@ main {
 }
 
 .modal-content {
-    background-color: var(--bg-color);
-    border: 2px solid var(--color-border);
-    border-radius: 12px;
-    padding: 2rem;
-    max-width: 500px;
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    max-width: 450px;
     width: 90%;
     position: relative;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--glass-shadow);
     max-height: 90vh;
     overflow-y: auto;
 }
 
 .close-btn {
     position: absolute;
-    top: 10px;
-    right: 15px;
-    background: none;
-    border: none;
-    color: var(--text-color);
-    font-size: 1.5rem;
+    top: 15px;
+    right: 20px;
+    background: var(--color-empty);
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 1.2rem;
     cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+    color: var(--text-color);
+    background: var(--color-absent);
+    transform: rotate(90deg);
 }
 
 .modal-content h2 {
     font-family: var(--font-heading);
-    margin-bottom: 1rem;
+    font-weight: 800;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
     color: var(--yellow);
     text-align: center;
     text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .modal-content p,
 .modal-content li {
-    margin-bottom: 0.8rem;
-    line-height: 1.5;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    font-size: 1.05rem;
 }
 
 .modal-content ul {
     padding-left: 1.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 /* Stats */
 .solution-text {
-    font-size: 1.25rem;
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
     font-weight: 800;
-    color: var(--light-blue);
+    color: var(--yellow);
     text-align: center;
-    margin-bottom: 1.5rem;
-    font-style: italic;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 10px;
-    border-radius: 6px;
+    margin-bottom: 2rem;
+    line-height: 1.4;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
 }
 
 .share-btn {
@@ -439,43 +520,47 @@ main {
     justify-content: center;
     gap: 0.5rem;
     width: 100%;
-    padding: 1rem;
+    padding: 1.2rem;
     font-family: var(--font-heading);
     font-weight: 800;
     font-size: 1.2rem;
     text-transform: uppercase;
-    background-color: var(--color-correct);
+    letter-spacing: 1px;
+    background: linear-gradient(to right, var(--color-correct), #059669);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .share-btn:hover {
-    background-color: #1ea34a;
-    transform: translateY(-2px);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    background: linear-gradient(to right, #1ea34a, #047857);
 }
 
 .share-btn:active {
-    transform: translateY(1px);
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
 }
 
 /* Responsive */
 @media (max-width: 400px) {
     .tile {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
     }
 
     .phrase-tile {
-        width: 24px;
-        height: 30px;
-        font-size: 1rem;
+        width: 26px;
+        height: 34px;
+        font-size: 1.1rem;
     }
 
     .keyboard button {
-        font-size: 0.85rem;
-        height: 48px;
+        font-size: 0.9rem;
+        height: 50px;
         max-width: 38px;
     }
 }

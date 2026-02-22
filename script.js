@@ -37,8 +37,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function initGame() {
         // Load target phrase
-        targetPhrase = await fetchDailyPhrase();
-        if (!targetPhrase) targetPhrase = "All you need is love";
+        if (typeof PHRASES !== 'undefined' && PHRASES.length > 0) {
+            const index = Math.floor(Math.random() * PHRASES.length);
+            targetPhrase = PHRASES[index];
+        } else {
+            targetPhrase = "All you need is love";
+        }
 
         let rawPhrase = targetPhrase.toLowerCase();
         for (let char of rawPhrase) {
@@ -52,27 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setupEventListeners();
     }
 
-    async function fetchDailyPhrase() {
-        try {
-            // Add a cache-buster query parameter so the browser doesn't aggressively cache the text file
-            const response = await fetch('phrases.txt?t=' + new Date().getTime());
-            if (!response.ok) throw new Error('Network response was not ok');
-            const text = await response.text();
-
-            const lines = text.split('\n')
-                .map(line => line.trim())
-                .filter(line => line.length > 0)
-                .map(line => line.replace(/\s*\(\d+\s*words?\)\s*$/i, ''));
-
-            if (lines.length === 0) return "Let it be";
-
-            const index = Math.floor(Math.random() * lines.length);
-            return lines[index];
-        } catch (error) {
-            console.error('Error fetching phrases:', error);
-            return "Here comes the sun";
-        }
-    }
 
     // --- UI Generation --- //
     function createWordleGrid() {
@@ -229,7 +212,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }, i * FLIP_DELAY_MS);
 
             // Emoji line construction
-            emojiLine += targetLetters.has(letter) ? '🟩' : '⬜';
+            const isTargetLetter = targetLetters.has(letter);
+            emojiLine += isTargetLetter ? '🟩' : '⬜';
         }
 
         emojiGrid.push(emojiLine);
