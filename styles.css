@@ -179,6 +179,7 @@ main {
     color: transparent;
     /* hidden text initially */
     position: relative;
+    text-transform: uppercase;
 }
 
 .phrase-tile.revealed {
