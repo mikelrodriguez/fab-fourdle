@@ -253,12 +253,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (allRevealed) {
                 gameStatus = 'WIN';
-                saveStats(true);
+                saveStats(true, currentRow);
                 showMessage("Brilliant!", 0);
                 setTimeout(showStats, 2000);
             } else if (currentRow === MAX_ROWS - 1) {
                 gameStatus = 'LOSE';
-                saveStats(false);
+                saveStats(false, currentRow);
                 setTimeout(showStats, 2000);
             } else {
                 currentRow++;
@@ -286,14 +286,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Utils --- //
-    function saveStats(isWin) {
-        let stats = JSON.parse(localStorage.getItem('fabFourdleStats') || '{"played":0,"wins":0,"currentStreak":0,"maxStreak":0}');
+    function saveStats(isWin, row) {
+        let stats = JSON.parse(localStorage.getItem('fabFourdleStats') || '{"played":0,"wins":0,"currentStreak":0,"maxStreak":0,"guesses":[0,0,0,0,0]}');
+
+        // Backwards compatibility for v1.1 stats
+        if (!stats.guesses) {
+            stats.guesses = [0, 0, 0, 0, 0];
+        }
+
         stats.played++;
         if (isWin) {
             stats.wins++;
             stats.currentStreak++;
             if (stats.currentStreak > stats.maxStreak) {
                 stats.maxStreak = stats.currentStreak;
+            }
+            if (row >= 0 && row < MAX_ROWS) {
+                stats.guesses[row]++;
             }
         } else {
             stats.currentStreak = 0;
@@ -366,12 +375,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Retrieve and populate stats
-        let stats = JSON.parse(localStorage.getItem('fabFourdleStats') || '{"played":0,"wins":0,"currentStreak":0,"maxStreak":0}');
+        let stats = JSON.parse(localStorage.getItem('fabFourdleStats') || '{"played":0,"wins":0,"currentStreak":0,"maxStreak":0,"guesses":[0,0,0,0,0]}');
         document.getElementById('stat-played').textContent = stats.played;
         const winPct = stats.played === 0 ? 0 : Math.round((stats.wins / stats.played) * 100);
         document.getElementById('stat-winpct').textContent = winPct;
         document.getElementById('stat-current-streak').textContent = stats.currentStreak;
         document.getElementById('stat-max-streak').textContent = stats.maxStreak;
+
+        // Populate Guess Distribution
+        const guesses = stats.guesses || [0, 0, 0, 0, 0];
+        const maxGuess = Math.max(...guesses, 1); // Avoid division by zero
+
+        for (let i = 0; i < MAX_ROWS; i++) {
+            const barEl = document.getElementById(`dist-bar-${i}`);
+            if (!barEl) continue;
+
+            const count = guesses[i];
+            barEl.textContent = count;
+
+            // Calculate width, min 7% so number is visible
+            let widthPct = Math.max(7, Math.round((count / maxGuess) * 100));
+            barEl.style.width = `${widthPct}%`;
+
+            // Highlight current guess if won
+            if ((gameStatus === 'WIN' || gameStatus === 'DONE') && i === currentRow) {
+                barEl.classList.add('current-run');
+            } else {
+                barEl.classList.remove('current-run');
+            }
+        }
     }
 
     async function shareResult() {

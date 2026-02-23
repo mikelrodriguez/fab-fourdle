@@ -516,7 +516,56 @@ main {
     opacity: 0.8;
 }
 
+.dist-title {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    text-align: left;
+}
 
+.distribution-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.dist-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.dist-num {
+    width: 15px;
+    text-align: right;
+}
+
+.dist-bar {
+    background-color: var(--color-absent);
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: white;
+    min-width: 7%;
+    border-radius: 4px;
+    transition: width 0.5s ease-out;
+}
+
+.dist-bar.current-run {
+    background-color: var(--color-correct);
+    box-shadow: 0 0 10px rgba(5, 150, 105, 0.4);
+}
 
 .modal-content p,
 .modal-content li {
