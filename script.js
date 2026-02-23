@@ -36,14 +36,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Initialization --- //
     initGame();
 
-    async function initGame() {
-        // Load target phrase
+    function getDailyPhrase() {
         if (typeof PHRASES !== 'undefined' && PHRASES.length > 0) {
-            const index = Math.floor(Math.random() * PHRASES.length);
-            targetPhrase = PHRASES[index];
-        } else {
-            targetPhrase = "All you need is love";
+            const epoch = new Date('2024-01-01T00:00:00');
+            const todayLocal = new Date();
+            todayLocal.setHours(0, 0, 0, 0);
+            // Calculate days since epoch
+            const diffTime = todayLocal - epoch;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            // Index safely into PHRASES
+            const index = Math.max(0, diffDays) % PHRASES.length;
+            return PHRASES[index];
         }
+        return "All you need is love";
+    }
+
+    async function initGame() {
+        // FTUE Check
+        if (!localStorage.getItem('hasSeenHelp')) {
+            helpModal.classList.remove('hidden');
+            localStorage.setItem('hasSeenHelp', 'true');
+        }
+
+        // Load daily target phrase
+        targetPhrase = getDailyPhrase();
 
         let rawPhrase = targetPhrase.toLowerCase();
         for (let char of rawPhrase) {
@@ -55,6 +71,17 @@ document.addEventListener('DOMContentLoaded', () => {
         createWordleGrid();
         createPhraseGrid();
         setupEventListeners();
+
+        // Check if already played today
+        const todayStr = new Date().toDateString();
+        const lastPlayed = localStorage.getItem('fabFourdleLastPlayed');
+        if (lastPlayed === todayStr) {
+            gameStatus = 'DONE';
+            setTimeout(() => {
+                showMessage("You've already played today!");
+                setTimeout(showStats, 2000);
+            }, 500);
+        }
     }
 
 
@@ -226,10 +253,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (allRevealed) {
                 gameStatus = 'WIN';
+                saveStats(true);
                 showMessage("Brilliant!", 0);
                 setTimeout(showStats, 2000);
             } else if (currentRow === MAX_ROWS - 1) {
                 gameStatus = 'LOSE';
+                saveStats(false);
                 setTimeout(showStats, 2000);
             } else {
                 currentRow++;
@@ -257,6 +286,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Utils --- //
+    function saveStats(isWin) {
+        let stats = JSON.parse(localStorage.getItem('fabFourdleStats') || '{"played":0,"wins":0,"currentStreak":0,"maxStreak":0}');
+        stats.played++;
+        if (isWin) {
+            stats.wins++;
+            stats.currentStreak++;
+            if (stats.currentStreak > stats.maxStreak) {
+                stats.maxStreak = stats.currentStreak;
+            }
+        } else {
+            stats.currentStreak = 0;
+        }
+        localStorage.setItem('fabFourdleStats', JSON.stringify(stats));
+
+        const todayStr = new Date().toDateString();
+        localStorage.setItem('fabFourdleLastPlayed', todayStr);
+    }
+
     function shakeRow(row) {
         for (let i = 0; i < WORD_LENGTH; i++) {
             const tile = document.getElementById(`tile-${row}-${i}`);
@@ -313,10 +360,18 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
         } else {
-            titleEl.textContent = "Statistics";
-            titleEl.style.color = "var(--yellow)";
+            titleEl.textContent = 'Statistics';
+            titleEl.style.color = 'var(--text-color)';
             solutionContainer.classList.add('hidden');
         }
+
+        // Retrieve and populate stats
+        let stats = JSON.parse(localStorage.getItem('fabFourdleStats') || '{"played":0,"wins":0,"currentStreak":0,"maxStreak":0}');
+        document.getElementById('stat-played').textContent = stats.played;
+        const winPct = stats.played === 0 ? 0 : Math.round((stats.wins / stats.played) * 100);
+        document.getElementById('stat-winpct').textContent = winPct;
+        document.getElementById('stat-current-streak').textContent = stats.currentStreak;
+        document.getElementById('stat-max-streak').textContent = stats.maxStreak;
     }
 
     async function shareResult() {

@@ -7,6 +7,13 @@
     <title>Fab-Fourdle | The Beatles Lyric Guessing Game</title>
     <meta name="description" content="Guess the hidden Beatles lyric by playing Wordle.">
 
+    <!-- PWA & Mobile Optimization -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e1b4b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="logo2.png">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -104,6 +111,24 @@
         <div class="modal-content">
             <button class="close-btn">&times;</button>
             <h2 id="end-title">Statistics</h2>
+            <div id="stats-grid" class="stats-grid">
+                <div class="stat-container">
+                    <div class="stat-value" id="stat-played">0</div>
+                    <div class="stat-label">Played</div>
+                </div>
+                <div class="stat-container">
+                    <div class="stat-value" id="stat-winpct">0</div>
+                    <div class="stat-label">Win %</div>
+                </div>
+                <div class="stat-container">
+                    <div class="stat-value" id="stat-current-streak">0</div>
+                    <div class="stat-label">Current Streak</div>
+                </div>
+                <div class="stat-container">
+                    <div class="stat-value" id="stat-max-streak">0</div>
+                    <div class="stat-label">Max Streak</div>
+                </div>
+            </div>
             <div id="solution-container" class="hidden">
                 <p>The lyric was:</p>
                 <div id="solution-text" class="solution-text"></div>

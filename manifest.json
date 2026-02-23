@@ -1,0 +1,16 @@
+{
+  "name": "Fab-Fourdle",
+  "short_name": "Fab-Fourdle",
+  "description": "Guess the hidden Beatles lyric by playing Wordle.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#1e1b4b",
+  "icons": [
+    {
+      "src": "logo2.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -476,13 +476,47 @@ main {
     font-family: var(--font-heading);
     font-weight: 800;
     font-size: 1.8rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
     color: var(--yellow);
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 1px;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
+
+/* Stats Dashboard */
+.stats-grid {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.stat-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+    color: var(--yellow);
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-color);
+    text-align: center;
+    opacity: 0.8;
+}
+
+
 
 .modal-content p,
 .modal-content li {
