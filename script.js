@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const phraseGridEl = document.getElementById('phrase-grid');
     const keyboardEl = document.getElementById('keyboard');
     const messageEl = document.getElementById('game-message');
+    const toastEl = document.getElementById('toast-message');
 
     const helpBtn = document.getElementById('help-btn');
     const statsBtn = document.getElementById('stats-btn');
@@ -229,7 +230,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(showStats, 2000);
             } else if (currentRow === MAX_ROWS - 1) {
                 gameStatus = 'LOSE';
-                showMessage(targetPhrase, 0); // show solution as toast
                 setTimeout(showStats, 2000);
             } else {
                 currentRow++;
@@ -276,6 +276,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function showToast(msg, duration = 2000) {
+        toastEl.textContent = msg;
+        toastEl.classList.remove('hidden');
+        if (duration > 0) {
+            setTimeout(() => {
+                toastEl.classList.add('hidden');
+            }, duration);
+        }
+    }
+
     function showStats() {
         statsModal.classList.remove('hidden');
         const titleEl = document.getElementById('end-title');
@@ -316,8 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             await navigator.clipboard.writeText(textToShare);
-            showMessage("Copied results to clipboard!");
-            statsModal.classList.add('hidden');
+            showToast("Copied results to clipboard!");
         } catch (err) {
             console.error('Failed to copy', err);
             prompt('Copy your results:', textToShare);
