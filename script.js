@@ -215,36 +215,48 @@ document.addEventListener('DOMContentLoaded', () => {
     function evaluateGuess(word) {
         let isWin = false;
         let emojiLine = "";
+        let statuses = [];
+
+        // Compute statuses synchronously to ensure emojis match the grid and handle duplicates
+        for (let i = 0; i < WORD_LENGTH; i++) {
+            const letter = word[i];
+            const isTargetLetter = targetLetters.has(letter);
+            const isFirstTime = isTargetLetter && !revealedLetters.has(letter);
+
+            if (isFirstTime) {
+                statuses.push('correct');
+                revealedLetters.add(letter);
+            } else {
+                statuses.push('absent');
+            }
+
+            emojiLine += statuses[i] === 'correct' ? '🟩' : '⬜';
+        }
+
+        emojiGrid.push(emojiLine);
 
         // We will flip letters sequentially
         for (let i = 0; i < WORD_LENGTH; i++) {
             const letter = word[i];
             const tile = document.getElementById(`tile-${currentRow}-${i}`);
+            const statusClass = statuses[i];
+            const isTargetLetter = targetLetters.has(letter);
 
             setTimeout(() => {
                 tile.classList.add('flip');
 
                 // Change color halfway through flip
                 setTimeout(() => {
-                    const isTargetLetter = targetLetters.has(letter);
-                    const statusClass = isTargetLetter ? 'correct' : 'absent';
                     tile.classList.add(statusClass);
-                    updateKeyboard(letter, statusClass);
+                    updateKeyboard(letter, isTargetLetter ? 'correct' : 'absent');
 
-                    if (isTargetLetter && !revealedLetters.has(letter)) {
-                        revealedLetters.add(letter);
+                    if (statusClass === 'correct') {
                         revealLetterInPhrase(letter);
                     }
                 }, FLIP_DELAY_MS / 2);
 
             }, i * FLIP_DELAY_MS);
-
-            // Emoji line construction
-            const isTargetLetter = targetLetters.has(letter);
-            emojiLine += isTargetLetter ? '🟩' : '⬜';
         }
-
-        emojiGrid.push(emojiLine);
 
         // Wait for row animation to finish
         setTimeout(() => {
